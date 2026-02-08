@@ -1,9 +1,9 @@
 export interface DoctorModel {
   name: string;
   timezone: string;
-  day_of_week: string | null;
-  available_at: string | null;
-  available_until: string | null;
+  day_of_week: string;
+  available_at: string ;
+  available_until: string ;
 }
 
 

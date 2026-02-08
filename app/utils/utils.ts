@@ -1,5 +1,6 @@
 // /Volumes/WD-SN5000-2T/code/rn/MedScheduler/app/utils/utils.ts
 
+import { DoctorModel } from "../models/types";
 /**
  * 获取指定日期所在周的 7 个日期（从星期日开始）
  * @param date 输入的日期
@@ -26,4 +27,14 @@ export const getWeekDateArray = (date: Date): Date[] => {
   });
 
   return weekDates;
+};
+
+
+export const filterDoctorOfWeekDay = (doctors: DoctorModel[], date: Date): DoctorModel[] => {
+
+   const weekdayFormatter = new Intl.DateTimeFormat('en-US', { weekday: "long" });
+   const weekday = (date:Date) => weekdayFormatter.format(date);
+  return doctors.filter(doctor =>
+    doctor.day_of_week?.toLowerCase() === weekday(date).toLowerCase()
+  );
 };

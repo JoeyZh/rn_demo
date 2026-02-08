@@ -29,10 +29,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
+          title: 'Doctors',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/doctors" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -50,7 +50,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="two"
         options={{
-          title: 'Tab Two',
+          title: 'Appointments',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
         }}
       />

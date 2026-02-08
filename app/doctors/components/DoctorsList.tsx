@@ -8,8 +8,8 @@ export const DoctorsList = ({doctors}: {doctors: DoctorModel[]}) => {
         {doctors.length === 0 ? (
           <Text>No doctors found</Text>
         ) : (
-          doctors.map((doctor) => (
-            <DoctorsItem key={doctor.id} doctor={doctor} />
+          doctors.map((doctor,i) => (
+            <DoctorsItem key={i} doctor={doctor} />
           ))
         )}
     </View>
