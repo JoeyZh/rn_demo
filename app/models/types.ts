@@ -14,8 +14,8 @@ export interface TimeSlotModel {
 }
 
 export interface MyAppointmentModel {
-  id: string;
-  patientId: string;
+  // id: string;
+  // patientId: string;
   doctor: DoctorModel;
   timeSlot: TimeSlotModel;
   status: 'scheduled' | 'completed' | 'canceled';

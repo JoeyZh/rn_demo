@@ -1,39 +1,38 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native"
-import { DoctorModel } from "@/app/models/types"
-import { useBook } from "../hooks/useBook"
+import { MyAppointmentModel } from "@/app/models/types"
 
-export const DoctorsItem = ({ doctor }: { doctor: DoctorModel }) => {
-  const { gotoDetail } = useBook()
-
+export const AppointmentItem = ({
+  appointment,
+}: {
+  appointment: MyAppointmentModel
+}) => {
   return (
-    <View style={styles.card}>``
+    <View style={styles.card}>
       {/* 医生信息区域 */}
       <View style={styles.infoContainer}>
-        {/* 医生姓名和图标 */}
-        <View style={styles.nameRow}>
-          <Text style={styles.doctorIcon}>👨‍⚕️</Text>
-          <Text style={styles.name}>{doctor.name}</Text>
+        <View style={styles.headRow}>
+          <View style={styles.nameRow}>
+            <Text style={styles.doctorIcon}>👨‍⚕️</Text>
+            <Text style={styles.name}>{appointment.doctor.name}</Text>
+          </View>
+          <Text style={styles.state}>{appointment.status}</Text>
         </View>
+        {/* 医生姓名和图标 */}
+
         {/* 时区信息 */}
         <View style={styles.infoRow}>
           <Text style={styles.label}>Time Zone</Text>
-          <Text style={styles.value}>{doctor.timezone}</Text>
+          <Text style={styles.value}>{appointment.doctor.timezone}</Text>
         </View>
         {/* 可用时间信息 */}
 
         <View style={styles.infoRow}>
           <Text style={styles.label}>Time:</Text>
-          <Text style={styles.value}>
-            {doctor.available_at} - {doctor.available_until}
-          </Text>
+          <Text style={styles.value}>{appointment.timeSlot.time}</Text>
         </View>
       </View>
 
-      <Button
-        title='Book Now'
-        onPress={() => gotoDetail(doctor)}
-        color='#007AFF'
-      />
+      <Button title='Cancel' onPress={() => () => {}} color='#007AFF' />
     </View>
   )
 }
@@ -55,9 +54,17 @@ const styles = StyleSheet.create({
   infoContainer: {
     marginBottom: 4,
   },
+  headRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   nameRow: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  state: {
+    fontSize: 12,
+    color: "#1a1a1a",
   },
   doctorIcon: {
     fontSize: 20,

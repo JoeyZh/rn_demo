@@ -4,7 +4,7 @@ import { DoctorsItem } from "./components/DoctorsItem"
 import { useTimeSlot } from "./hooks/useTimeSlot"
 import { useRouter } from "expo-router"
 
-export default function AppointmentScreen() {
+export default function DoctorProfilesScreen() {
   const router = useRouter()
   const { timeSlots, doctor, bookSlot } = useTimeSlot()
 

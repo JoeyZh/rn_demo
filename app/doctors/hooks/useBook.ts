@@ -13,7 +13,7 @@ export const useBook = () => {
     dispatch(selectDoctor(doctor));
 
     // 2. 跳转到预约详情页
-    router.push('/appointment'); // 使用 Expo Router 的 push 方法
+    router.push('/profiles'); // 使用 Expo Router 的 push 方法
   };
 
   return { gotoDetail };
