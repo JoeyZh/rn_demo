@@ -26,5 +26,5 @@ export const useDoctorList = () => {
   }, [])
 
 
-  return { doctors, selectedDate, setSelectedDate ,filterDoctors}
+  return { selectedDate, setSelectedDate ,filterDoctors}
 }

@@ -7,17 +7,16 @@ export interface DoctorModel {
 }
 
 
-export interface AvailableTimeSlot {
-  doctorId: string;
-  start: Date;
-  end: Date;
+export interface TimeSlotModel {
+  doctor: DoctorModel;
+  time:string;
   isBooked: boolean;
 }
 
-export interface MyAppointment {
+export interface MyAppointmentModel {
   id: string;
   patientId: string;
-  doctorId: string;
-  timeSlot: AvailableTimeSlot;
+  doctor: DoctorModel;
+  timeSlot: TimeSlotModel;
   status: 'scheduled' | 'completed' | 'canceled';
 }

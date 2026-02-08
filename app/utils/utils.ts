@@ -38,3 +38,52 @@ export const filterDoctorOfWeekDay = (doctors: DoctorModel[], date: Date): Docto
     doctor.day_of_week?.toLowerCase() === weekday(date).toLowerCase()
   );
 };
+
+/**
+ * 获取医生的可用时间段
+ * @param doctor 医生信息
+ * @param date 查询日期（用于未来扩展，当前未使用）
+ * @returns 可用时间段数组（格式为 HH:MM）
+ */
+export const getTimeSlot = (doctor: DoctorModel | null, date: Date | null = new Date()): string[] => {
+  // 参数校验
+  if (!doctor || !doctor.available_at || !doctor.available_until) {
+    throw new Error("Invalid doctor data: missing available_at or available_until fields");
+  }
+
+  if (!(date instanceof Date) || isNaN(date.getTime())) {
+    throw new Error("Invalid date input");
+  }
+
+  // 解析时间字符串（支持 AM/PM 格式）
+  const parseTime = (timeStr: string): Date => {
+    const [time, modifier] = timeStr.match(/(\d{1,2}:\d{2})(AM|PM)?/)!.slice(1);
+    let [hours, minutes] = time.split(":").map(Number);
+
+    if (modifier === "PM" && hours !== 12) {
+      hours += 12;
+    } else if (modifier === "AM" && hours === 12) {
+      hours = 0;
+    }
+
+    const parsedDate = new Date();
+    parsedDate.setHours(hours, minutes, 0, 0);
+    return parsedDate;
+  };
+
+  const startTime = parseTime(doctor.available_at);
+  const endTime = parseTime(doctor.available_until);
+
+  // 检查时间范围合法性
+  if (startTime >= endTime) {
+    throw new Error("Invalid time range: available_at must be earlier than available_until");
+  }
+
+  // 生成时间段（每 30 分钟一个间隔）
+  const timeSlots: string[] = [];
+  for (let time = new Date(startTime); time < endTime; time.setMinutes(time.getMinutes() + 30)) {
+    timeSlots.push(time.toTimeString().slice(0, 5)); // 格式化为 HH:MM
+  }
+
+  return timeSlots;
+};

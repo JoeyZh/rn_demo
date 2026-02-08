@@ -1,7 +1,6 @@
 // __tests__/utils.test.ts
-import { filterDoctorOfWeekDay } from "../app/utils/utils";
+import { filterDoctorOfWeekDay,getWeekDateArray,getTimeSlot} from "../app/utils/utils";
 import { DoctorModel } from "../app/models/types";
-import { getWeekDateArray } from "../app/utils/utils";
 
 describe("getWeekDateArray", () => {
   // 测试正常情况：输入一个日期，返回正确的周日期数组
@@ -275,5 +274,111 @@ describe("filterDoctorOfWeekDay", () => {
       available_at: "08:00",
       available_until: "16:00"
     }]);
+  });
+});
+
+
+describe("getTimeSlot", () => {
+  // 测试正常情况：标准时间格式
+  it("should generate time slots for standard time format", () => {
+    const doctor: DoctorModel = {
+      name: "Dr. Smith",
+      timezone: "America/New_York",
+      day_of_week: "Monday",
+      available_at: "09:00",
+      available_until: "17:00",
+    };
+    const date = new Date("2026-02-02");
+
+    const result = getTimeSlot(doctor, date);
+
+    expect(result).toEqual([
+      "09:00",
+      "09:30",
+      "10:00",
+      "10:30",
+      "11:00",
+      "11:30",
+      "12:00",
+      "12:30",
+      "13:00",
+      "13:30",
+      "14:00",
+      "14:30",
+      "15:00",
+      "15:30",
+      "16:00",
+      "16:30",
+    ]);
+  });
+
+  // 测试 AM/PM 时间格式
+  it("should generate time slots for AM/PM time format", () => {
+    const doctor: DoctorModel = {
+      name: "Dr. Johnson",
+      timezone: "America/New_York",
+      day_of_week: "Tuesday",
+      available_at: "8:00AM",
+      available_until: "3:00PM",
+    };
+    const date = new Date("2026-02-03");
+
+    const result = getTimeSlot(doctor, date);
+
+    expect(result).toEqual([
+      "08:00",
+      "08:30",
+      "09:00",
+      "09:30",
+      "10:00",
+      "10:30",
+      "11:00",
+      "11:30",
+      "12:00",
+      "12:30",
+      "13:00",
+      "13:30",
+      "14:00",
+      "14:30",
+    ]);
+  });
+
+  // 测试无效输入：缺少字段
+  it("should throw an error for missing doctor fields", () => {
+    const doctor = {} as DoctorModel;
+    const date = new Date("2026-02-02");
+
+    expect(() => getTimeSlot(doctor, date)).toThrow(
+      "Invalid doctor data: missing available_at or available_until fields"
+    );
+  });
+
+  // 测试无效输入：非法日期
+  it("should throw an error for invalid date input", () => {
+    const doctor: DoctorModel = {
+      name: "Dr. Brown",
+      timezone: "America/New_York",
+      day_of_week: "Wednesday",
+      available_at: "09:00",
+      available_until: "17:00",
+    };
+
+    expect(() => getTimeSlot(doctor, new Date("invalid"))).toThrow("Invalid date input");
+  });
+
+  // 测试非法时间范围
+  it("should throw an error for invalid time range", () => {
+    const doctor: DoctorModel = {
+      name: "Dr. Lee",
+      timezone: "America/New_York",
+      day_of_week: "Thursday",
+      available_at: "17:00",
+      available_until: "09:00",
+    };
+    const date = new Date("2026-02-05");
+
+    expect(() => getTimeSlot(doctor, date)).toThrow(
+      "Invalid time range: available_at must be earlier than available_until"
+    );
   });
 });

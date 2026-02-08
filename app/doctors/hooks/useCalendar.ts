@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
 import { getWeekDateArray } from "@/app/utils/utils"
-
+import { useDispatch } from 'react-redux';
+import { selectDate } from '@/app/store/doctorSlice';
 export const useCalendar = (changeDate: (date: Date) => void) => {
   const [dateArray, setDateArray] = useState<Date[]>([])
-
+  const dispatch = useDispatch();
   const [selected, setSelected] = useState<number>(0)
 
   const setSelectedDate = (date: Date) => {
@@ -11,6 +12,7 @@ export const useCalendar = (changeDate: (date: Date) => void) => {
     if (index !== -1) {
       setSelected(index)
       changeDate(date)
+      dispatch(selectDate(date))
     }
   }
   const isSelected = (index: number) => {

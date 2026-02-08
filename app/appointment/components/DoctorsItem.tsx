@@ -1,9 +1,6 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native"
 import { DoctorModel } from "@/app/models/types"
-import { useBook } from "../hooks/useBook"
-
 export const DoctorsItem = ({ doctor }: { doctor: DoctorModel }) => {
-  const { gotoDetail } = useBook()
 
   return (
     <View style={styles.card}>
@@ -19,21 +16,14 @@ export const DoctorsItem = ({ doctor }: { doctor: DoctorModel }) => {
           <Text style={styles.label}>Time Zone</Text>
           <Text style={styles.value}>{doctor.timezone}</Text>
         </View>
-        {/* 可用时间信息 */}
-
-        <View style={styles.infoRow}>
-          <Text style={styles.label}>Time:</Text>
-          <Text style={styles.value}>
-            {doctor.available_at} - {doctor.available_until}
-          </Text>
+         <View style={styles.infoRow}>
+                  <Text style={styles.label}>Time:</Text>
+                  <Text style={styles.value}>
+                    {doctor.available_at} - {doctor.available_until}
+                  </Text>
+                </View>
         </View>
-      </View>
 
-      <Button
-        title='Book Now'
-        onPress={() => gotoDetail(doctor)}
-        color='#007AFF'
-      />
     </View>
   )
 }
@@ -68,18 +58,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#1a1a1a",
   },
-  infoContent: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
   infoRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     marginTop: 4,
-  },
-  infoItem: {
-    flex: 1,
   },
   label: {
     fontSize: 12,
@@ -92,22 +75,5 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     flex: 1,
     marginLeft: 8,
-  },
-  button: {
-    backgroundColor: "#007AFF",
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: "center",
-    marginTop: 8,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  buttonContainer: {
-    alignSelf: "flex-end", // 将按钮对齐到右侧
-    marginTop: 8, // 可选：增加按钮与上方内容的间距
-    width: 100, // 设置按钮宽度为 100
-  },
+  }
 })
