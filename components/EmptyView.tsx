@@ -5,11 +5,13 @@ export const EmptyView = ({
   loading,
   loadingMessage,
   onLoading,
+  reload,
 }: {
   message: string;
   loading: boolean;
   loadingMessage: string;
   onLoading: () => void;
+  reload?: boolean;
 }) => {
   return (
     <View style={styles.container}>
@@ -18,7 +20,7 @@ export const EmptyView = ({
       ) : (
         <>
           <Text style={styles.text}>{message}</Text>
-          <Button title="Reload" onPress={onLoading} />
+          {reload && <Button title="Reload" onPress={onLoading} />}
         </>
       )}
     </View>
@@ -32,6 +34,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',     // 水平居中
   },
   text: {
+    fontSize: 16,
     textAlign: 'center',  
     marginTop: 16,         // 文本居中对齐
     marginBottom: 16,         // 添加按钮与文本之间的间距

@@ -44,6 +44,14 @@ export const useTimeSlot = () => {
         dateTime: selectedDate,
         time: currentSlot.current,
       }
+      // 更新timeSlots状态，为预定状态
+      setTimeSlots((prev) =>
+        prev.map((slot) =>
+          slot.time === currentSlot.current
+            ? { ...slot, isBooked: true }
+            : slot
+        )
+      )
       dispatch(bookTimeSlot({ ...item }))
     }
   }

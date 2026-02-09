@@ -9,8 +9,6 @@ export default function AppointmentsScreen() {
 
   return (
     <ScrollView>
-      <Text>AppointmentsScreen</Text>
-
       {/* <AppointmentItem appointment={mockAppointment} /> */}
       <AppointmentList items={appointments} onCancelItem={cancelBook} />
     </ScrollView>

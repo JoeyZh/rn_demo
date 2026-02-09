@@ -1,5 +1,5 @@
 import { MyAppointmentModel } from "@/app/models/types";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { RootState } from "@/app/store"
 import { appointmentStatus } from "@/app/utils/bookUtils";
@@ -21,12 +21,17 @@ export const useAppointment = () => {
 
   const cancelBook = (appointItem: MyAppointmentModel) => {
     // 预约逻辑
+    dispatch({
+      type: "cancelBook",
+      payload: {
+        id: appointItem.timeSlot.id,
+      },
+    });
   };
 
-  const mockAppointments = () => {
-    // 获取预约列表
-    
-  };
+  useEffect(() => {
+    setAppointments(initAppointments);
+  }, [allBookedList]);
 
   return { cancelBook ,appointments};
 };

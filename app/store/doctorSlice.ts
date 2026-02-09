@@ -9,6 +9,7 @@ interface DoctorState {
   selectedDoctor: DoctorModel | null
   selectedDate: number // 新增：选中的日期 时间戳
   bookedTimeSlots: BookedSlotModel[] // 医生姓名 -> 日期 -> 时间槽数组
+  offline: boolean // 离线状态
 }
 
 const initialState: DoctorState = {
@@ -16,12 +17,16 @@ const initialState: DoctorState = {
   selectedDate: Date.now(), // 初始化：当前时间戳
   // 改成通过 doctorsAsyncStorates 获取，初始值为空数组
   bookedTimeSlots: [],
+  offline: false,
 }
 
 export const doctorSlice = createSlice({
   name: "doctor",
   initialState,
   reducers: {
+    setOffline: (state, action: PayloadAction<boolean>) => {
+      state.offline = action.payload
+    },
     // 选择医生
     selectDoctor: (state, action: PayloadAction<DoctorModel>) => {
       state.selectedDoctor = action.payload
@@ -122,5 +127,6 @@ export const {
   bookTimeSlot,
   cancelTimeSlot,
   initBookedTimeSlots,
+  setOffline
 } = doctorSlice.actions
 export const doctorReducer = doctorSlice.reducer

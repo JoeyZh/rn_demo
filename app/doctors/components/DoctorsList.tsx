@@ -21,6 +21,7 @@ export const DoctorsList = ({
           loading={loading}
           loadingMessage='Loading doctors...'
           onLoading={onLoading}
+          reload={true}
         />
       ) : (
         doctors.map((doctor, i) => (
