@@ -8,7 +8,7 @@ export interface DoctorModel {
 
 
 export interface TimeSlotModel {
-  doctor: DoctorModel;
+  timezone: string;
   time:string;
   isBooked: boolean;
 }
@@ -35,3 +35,5 @@ export interface BookedSlotModel {
   bookedTime: number;
   isBooked: boolean;
 }
+
+export type outDateFunc = (date: Date, time: string, timeZone: string) => boolean;

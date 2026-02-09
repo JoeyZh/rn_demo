@@ -1,10 +1,11 @@
 
 import { StyleSheet, Text, TouchableOpacity } from "react-native"
 import { TimeSlotModel } from "@/app/models/types"
-export const TimeSlot = ({ timeSlot,bookSlot }: { timeSlot: TimeSlotModel;bookSlot:(time:string)=>void }) => {
+export const TimeSlot = ({ timeSlot,bookSlot ,outDate}: { timeSlot: TimeSlotModel;bookSlot:(time:string)=>void, outDate:boolean }) => {
   return (
   <TouchableOpacity
-       style={[styles.container, timeSlot.isBooked && styles.booked]} // 动态应用选中样式
+       disabled={outDate || timeSlot.isBooked} // 如果时间已被预约或过期，则禁用按钮
+       style={[styles.container, timeSlot.isBooked && styles.booked, outDate && styles.outDate]} // 动态应用选中样式
        onPress={() => bookSlot(timeSlot.time)}
      >
        <Text style={[styles.timeText , timeSlot.isBooked && styles.timeBooked]}>
@@ -29,11 +30,16 @@ const styles = StyleSheet.create({
     alignItems: "center", // 内容居中对齐
     width: "20%", // 调整宽度以适应网格布局
   },
+  outDate:{
+    opacity: 0.8, // 半透明效果
+  },
   booked: {
     borderWidth: 1,
     borderColor: "#aaa",
     backgroundColor: "#f0f0f0",
   },
+
+
   timeText: {
     color: "#333",
     fontSize: 14,

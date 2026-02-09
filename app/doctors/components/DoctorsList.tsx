@@ -1,23 +1,32 @@
- import { View, Text } from 'react-native';
-import { DoctorsItem } from './DoctorsItem';
-import { DoctorModel } from '@/app/models/types'; // 导入 DoctorModel 类型
-import { EmptyView } from '@/components/EmptyView';
-export const DoctorsList = ({doctors,loading,onLoading}: {doctors: DoctorModel[],loading:boolean,onLoading:()=>void}) => {
-
+import { View, Text } from "react-native"
+import { DoctorsItem } from "./DoctorsItem"
+import { DoctorModel } from "@/app/models/types" // 导入 DoctorModel 类型
+import { EmptyView } from "@/components/EmptyView"
+export const DoctorsList = ({
+  doctors,
+  loading,
+  onLoading,
+  gotoDetail,
+}: {
+  doctors: DoctorModel[]
+  loading: boolean
+  onLoading: () => void
+  gotoDetail: (doctor: DoctorModel) => void
+}) => {
   return (
     <View>
-        {doctors.length === 0 ? (
-          <EmptyView
-            message="No doctors found"
-            loading={loading}
-            loadingMessage="Loading doctors..."
-            onLoading={onLoading}
-          />
-        ) : (
-          doctors.map((doctor,i) => (
-            <DoctorsItem key={i} doctor={doctor} />
-          ))
-        )}
+      {doctors.length === 0 ? (
+        <EmptyView
+          message='No doctors found'
+          loading={loading}
+          loadingMessage='Loading doctors...'
+          onLoading={onLoading}
+        />
+      ) : (
+        doctors.map((doctor, i) => (
+          <DoctorsItem key={i} doctor={doctor} gotoDetail={gotoDetail} />
+        ))
+      )}
     </View>
-  );
-};
+  )
+}

@@ -14,7 +14,7 @@ export const useAppointment = () => {
      timeSlot: item, // 假设 item 对应 timeSlot
      status: item.isBooked ? appointmentStatus(new Date(item.date), item.time) : "canceled", // 添加默认状态
    }));
-   return list.sort((a, b) => a.timeSlot.bookedTime - b.timeSlot.bookedTime);
+   return list.sort((a, b) => b.timeSlot.bookedTime - a.timeSlot.bookedTime );
  }, [allBookedList]);
 
   const [appointments, setAppointments] = useState<MyAppointmentModel[] | []>(initAppointments);

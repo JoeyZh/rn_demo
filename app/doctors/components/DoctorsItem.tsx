@@ -2,8 +2,7 @@ import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native"
 import { DoctorModel } from "@/app/models/types"
 import { useBook } from "../hooks/useBook"
 
-export const DoctorsItem = ({ doctor }: { doctor: DoctorModel }) => {
-  const { gotoDetail } = useBook()
+export const DoctorsItem = ({ doctor,gotoDetail}: { doctor: DoctorModel , gotoDetail: (doctor: DoctorModel) => void }) => {
 
   return (
     <View style={styles.card}>

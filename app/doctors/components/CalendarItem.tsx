@@ -1,31 +1,17 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { isEarly } from "@/app/utils/utils";
+import { isEarlyByDay,weekday,getDateDay } from "@/app/utils/utils";
 
 export const CalendarItem = ({
   date,
-  locale = "en-US",
   isSelected,
   setSelectedDate,
 }: {
   date: Date;
-  locale?: string;
   isSelected: boolean;
   setSelectedDate: (date: Date) => void;
 }) => {
-  // 创建 Intl.DateTimeFormat 实例，仅显示日期
-  const dateFormatter = new Intl.DateTimeFormat(locale, {
-    day: "numeric", // 仅显示日期
-  });
 
-  // 格式化日期（仅显示日期）
-  const formattedDate = dateFormatter.format(date);
-
-  // 单独获取星期几（短格式）
-  const weekdayFormatter = new Intl.DateTimeFormat(locale, { weekday: "short" });
-  const weekday = weekdayFormatter.format(date);
-
-  const disabled = isEarly(date);
-  
+  const disabled = isEarlyByDay(date);
 
  return (
     <TouchableOpacity
@@ -33,10 +19,10 @@ export const CalendarItem = ({
       onPress={() => setSelectedDate(date)}
     >
       <Text style={[styles.weekdayText, isSelected  && styles.selectedWeekdayText]}>
-        {weekday}
+        {weekday(date)}
       </Text>
       <Text style={[styles.dateText, isSelected && styles.selectedDateText]}>
-        {formattedDate}
+        {getDateDay(date)}
       </Text>
     </TouchableOpacity>
   );

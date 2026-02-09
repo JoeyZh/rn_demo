@@ -5,10 +5,12 @@ import { useTimeSlot } from "./hooks/useTimeSlot"
 import { useRouter } from "expo-router"
 import { use, useActionState } from "react"
 import { useBookAlert } from "./hooks/useBookAlert"
+import { bookedAvailable } from "../utils/bookUtils"
+import { selectDate } from "../store/doctorSlice"
 
 export default function DoctorProfilesScreen() {
   const router = useRouter()
-  const { timeSlots, doctor, bookSlot, currentSlot } = useTimeSlot()
+  const { timeSlots, doctor, bookSlot, currentSlot, date } = useTimeSlot()
   const { show } = useBookAlert({
     onConfirm: () => {
       bookSlot()
@@ -36,6 +38,8 @@ export default function DoctorProfilesScreen() {
       <View style={styles.timeSlotSection}>
         <Text style={styles.sectionTitle}>Available Time Slots</Text>
         <TimeSlotList
+          date={date}
+          outDate={bookedAvailable}
           timeSlots={timeSlots || []}
           onTimeSlotPress={(time) => {
             currentSlot.current = time

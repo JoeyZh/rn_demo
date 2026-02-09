@@ -68,7 +68,8 @@ export const doctorSlice = createSlice({
       )
 
       if (existingIndex >= 0) {
-        // 更新createTime为当前时间
+        console.log("已存在该时间槽",existingIndex)
+                // 更新createTime为当前时间
         const item = state.bookedTimeSlots[existingIndex]
         state.bookedTimeSlots[existingIndex]= {
           ...item,

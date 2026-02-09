@@ -1,8 +1,9 @@
 // /Volumes/WD-SN5000-2T/code/rn/MedScheduler/app/doctors/hooks/useBook.ts
 import { DoctorModel } from "@/app/models/types";
 import { useDispatch } from 'react-redux';
-import { useRouter } from 'expo-router'; // 使用 Expo Router 的 useRouter
+import { useRouter } from 'expo-router'; 
 import { selectDoctor } from '@/app/store/doctorSlice';
+import { bookedAvailable } from "@/app/utils/bookUtils";
 
 // useBook.ts
 import { useSelector } from 'react-redux';
@@ -13,7 +14,6 @@ export const useBook = () => {
   const router = useRouter();
 
   const selectedDateStr = useSelector((state: RootState) => state.doctor.selectedDate);
-
   const gotoDetail = (doctor: DoctorModel) => {
     // 1. 将医生信息存储到 Redux 中
     dispatch(selectDoctor(doctor));
@@ -27,5 +27,5 @@ export const useBook = () => {
     return selectedDateStr ? new Date(selectedDateStr) : null;
   };
 
-  return { gotoDetail, getSelectedDate };
+  return { gotoDetail, getSelectedDate};
 };
