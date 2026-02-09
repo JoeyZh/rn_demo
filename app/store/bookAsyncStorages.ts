@@ -59,7 +59,7 @@ export const addRow = async (row: BookedSlotModel): Promise<boolean|string> => {
     // 3. 新增行（push 到数组末尾）
     tableData.push({
       ...{...row, id: newId},
-      createTime: row.createTime || new Date().toISOString(), // 自动补全时间
+      bookedTime: row.bookedTime || Date.now(), // 自动补全时间
     })
     // 4. 存回 AsyncStorage
     await AsyncStorage.setItem(TABLE_KEY, JSON.stringify(tableData))

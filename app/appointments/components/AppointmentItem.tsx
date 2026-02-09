@@ -47,7 +47,7 @@ export const AppointmentItem = ({
       </View>
 
       {appointment.status === "scheduled" && (
-        <Button title='Cancel BOOKING' onPress={() => () => {}} color='#007AFF' />
+        <Button title='Cancel BOOKING' onPress={() => onCancel(appointment)} color='#007AFF' />
       )}
     </View>
   )

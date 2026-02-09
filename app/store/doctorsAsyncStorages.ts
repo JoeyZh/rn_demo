@@ -3,7 +3,26 @@ import { DoctorModel } from "../models/types"
 
 const DOCTORS_TABLE_KEY = "DOCTORS_TABLE"
 
-export type filterFn = (item: DoctorModel) => boolean
+const OFFLINE_KEY = "OFFLINE_KEY"
+
+export const setOffline = async (offline: boolean) => {
+  try {
+    await AsyncStorage.setItem(OFFLINE_KEY, JSON.stringify(offline))
+  } catch (error) {
+    console.error("设置离线状态失败：", error)
+  }
+}
+
+export const getOffline = async () => {
+  try {
+    const offline = await AsyncStorage.getItem(OFFLINE_KEY)
+    return JSON.parse(offline || "false")
+  } catch (error) {
+    console.error("获取离线状态失败：", error)
+    return false
+  }
+}
+
 /**
  * 初始化表格（若不存在则创建空数组）
  */

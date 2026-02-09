@@ -23,7 +23,7 @@ export const useDoctorList = () => {
       console.log("Fetching doctors, offline mode:", offline)
       const data = offline ? await queryRows() : await listDoctors()
       setDoctors(data)
-      initTable().then(() => addAllRow(data))
+      addAllRow(data)
     } catch (error) {
       console.error("Error fetching doctors:", error)
     } finally {

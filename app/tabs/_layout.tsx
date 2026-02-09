@@ -34,7 +34,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text> offline</Text>
+              <Text> OFFLINE</Text>
               <Switch
                 value={offline}
                 onValueChange={toggleOffline}
