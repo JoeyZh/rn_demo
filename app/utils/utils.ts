@@ -103,7 +103,9 @@ export const getTimeSlot = (
 
 export const equalsIgnoreTime = (date1: Date, date2: Date): boolean => {
   const formatDate = (d: Date) => d.toISOString().split("T")[0] // 转换为 YYYY-MM-DD 格式
-  return formatDate(date1) === formatDate(date2)
+  const d1 = formatDate(date1)
+  const d2 = formatDate(date2)
+  return d1 === d2
 }
 
 export const isEarlyByDay = (date: Date): boolean => {

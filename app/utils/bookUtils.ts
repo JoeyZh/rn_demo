@@ -55,3 +55,13 @@ export const bookedAvailable = (date: Date,time:string, timezone: string,interva
   //  如果当前时间早于预约时间 并且预约时间与当前时间的间隔大于 interval，则返回 true，否则返回 false
   return now.getTime() - bookDate.getTime() > interval;
 };
+
+export const mergeSlotDate = (item: BookedSlotModel): string => {
+  const { date, time } = item;
+  const mergedDate = new Date(date);
+  const [hours, minutes] = time.split(":").map(Number);
+  mergedDate.setHours(hours);
+  mergedDate.setMinutes(minutes);
+  mergedDate.setSeconds(0);
+  return  mergedDate.toLocaleString("en-US");
+};

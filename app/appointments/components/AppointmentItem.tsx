@@ -1,5 +1,6 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native"
 import { MyAppointmentModel } from "@/app/models/types"
+import { mergeSlotDate } from "@/app/utils/bookUtils"
 
 export const AppointmentItem = ({
   appointment,
@@ -40,8 +41,8 @@ export const AppointmentItem = ({
         {/* 可用时间信息 */}
 
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Time:</Text>
-          <Text style={styles.value}>{appointment.timeSlot.time}</Text>
+          <Text style={styles.label}>Date:</Text>
+          <Text style={styles.value}>{mergeSlotDate(appointment.timeSlot)}</Text>
         </View>
       </View>
 

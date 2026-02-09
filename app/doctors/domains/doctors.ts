@@ -6,7 +6,7 @@ export const listDoctors = async (): Promise<DoctorModel[]> => {
     throw new Error('Failed to fetch doctors');
   }
   const doctors = await response.json();
-  console.log('Fetched doctors:', doctors);
+  // console.log('Fetched doctors:', doctors);
   return doctors;
 };
 

@@ -1,6 +1,5 @@
 import { DoctorsList } from "./components/DoctorsList"
-import { DoctorModel } from "../models/types"
-import { View, Text, ScrollView } from "react-native"
+import { ScrollView } from "react-native"
 import { WeeklyCalendar } from "./components/WeeklyCalendar"
 import { useDoctorList } from "./hooks/useDoctorList"
 import { useBook } from "./hooks/useBook"
