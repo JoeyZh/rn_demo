@@ -18,4 +18,13 @@ module.exports = {
     'node_modules/(?!(react-native|@react-native|@expo|expo|@react-navigation)/)',
   ],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  transform: {
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      tsconfig: {
+        jsx: 'react',
+        esModuleInterop: true,
+        allowSyntheticDefaultImports: true,
+      },
+    }],
+  },
 };

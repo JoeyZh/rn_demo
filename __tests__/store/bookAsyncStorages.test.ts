@@ -9,9 +9,8 @@ import {
   clearTable,
 } from "@/app/store/bookAsyncStorages";
 import { BookedSlotModel } from "@/app/models/types";
-import { generateUniqueId } from "@/app/utils/bookUtils";
 
-// Mock AsyncStorage
+// Mock AsyncStorage  
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
@@ -19,23 +18,24 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
 
 describe("bookAsyncStorages", () => {
   const mockTableKey = "BOOKED_SLOTS_TABLE";
-  // 使用字符串格式的日期，因为 JSON.parse 会将 Date 对象转换为字符串
-  const mockData = [
+  const mockData: BookedSlotModel[] = [
     {
-      id: "1",
+      id: "Dr. Smith_2023-10-01_10:00", // 使用 generateUniqueId 生成的 ID
       doctorName: "Dr. Smith",
-      date: "2023-10-01T00:00:00.000Z",
+      doctorTimeZone: "UTC",
+      date: 1696118400000, // 2023-10-01 00:00:00 UTC
       time: "10:00",
-      createTime: "2023-10-01T09:00:00.000Z",
-      userId: 1,
+      bookedTime: 1696152000000, // 2023-10-01 10:00:00 UTC
+      isBooked: true,
     },
     {
-      id: "2",
-      doctorName: "Dr. Jones",
-      date: "2023-10-02T00:00:00.000Z",
-      time: "11:00",
-      createTime: "2023-10-02T10:00:00.000Z",
-      userId: 1,
+      id: "Dr. Johnson_2023-10-02_14:00", // 使用 generateUniqueId 生成的 ID
+      doctorName: "Dr. Johnson",
+      doctorTimeZone: "UTC",
+      date: 1696204800000, // 2023-10-02 00:00:00 UTC
+      time: "14:00",
+      bookedTime: 1696256400000, // 2023-10-02 14:00:00 UTC
+      isBooked: true,
     },
   ];
 
@@ -70,32 +70,37 @@ describe("bookAsyncStorages", () => {
       const newRow: BookedSlotModel = {
         id: "3",
         doctorName: "Dr. Brown",
-        date: new Date("2023-10-03"),
+        doctorTimeZone: "UTC",
+        date: 1696291200000, // 2023-10-03 00:00:00 UTC
         time: "12:00",
-        createTime: new Date("2023-10-03T11:00:00Z"),
-        userId: 1,
+        bookedTime: 1696339200000, // 2023-10-03 11:00:00 UTC
+        isBooked: true,
       };
       const result = await addRow(newRow);
-      expect(result).toBe(true);
+      // addRow 返回生成的 ID 字符串
+      expect(result).toBe("Dr. Brown_2023-10-03_12:00");
       expect(AsyncStorage.setItem).toHaveBeenCalledWith(
         mockTableKey,
-        JSON.stringify([...mockData, { ...newRow, date: expect.any(String), createTime: expect.any(String) }])
+        JSON.stringify([...mockData, { ...newRow, id: "Dr. Brown_2023-10-03_12:00" }])
       );
     });
 
-    test("should not add a row if the id already exists", async () => {
+    test("should not add a row if the generated id already exists", async () => {
       (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(
         JSON.stringify(mockData)
       );
+      // 创建一个会生成与 mockData 中第一个记录相同 ID 的记录
       const duplicateRow: BookedSlotModel = {
-        id: "1",
+        id: "any-id",
         doctorName: "Dr. Smith",
-        date: new Date("2023-10-01"),
+        doctorTimeZone: "UTC",
+        date: 1696118400000, // 2023-10-01 00:00:00 UTC
         time: "10:00",
-        createTime: new Date("2023-10-01T09:00:00Z"),
-        userId: 1,
+        bookedTime: 1696152000000, // 2023-10-01 10:00:00 UTC
+        isBooked: true,
       };
       const result = await addRow(duplicateRow);
+      // 生成的 ID "Dr. Smith_2023-10-01_10:00" 已存在于 mockData 中
       expect(result).toBe(false);
       expect(AsyncStorage.setItem).not.toHaveBeenCalled();
     });
@@ -136,7 +141,7 @@ describe("bookAsyncStorages", () => {
       (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(
         JSON.stringify(mockData)
       );
-      const result = await deleteRow("1");
+      const result = await deleteRow("Dr. Smith_2023-10-01_10:00");
       expect(result).toBe(true);
       expect(AsyncStorage.setItem).toHaveBeenCalledWith(
         mockTableKey,
@@ -148,7 +153,7 @@ describe("bookAsyncStorages", () => {
       (AsyncStorage.getItem as jest.Mock).mockResolvedValueOnce(
         JSON.stringify(mockData)
       );
-      const result = await deleteRow("999");
+      const result = await deleteRow("non-existent-id");
       expect(result).toBe(true);
       expect(AsyncStorage.setItem).toHaveBeenCalledWith(
         mockTableKey,

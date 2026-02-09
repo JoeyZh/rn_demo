@@ -104,6 +104,25 @@ export const queryRows = async (
 }
 
 /**
+ * 删除行（按主键删除）
+ * @param {string} id - 主键 ID
+ */
+export const deleteRow = async (id: string) => {
+  try {
+    const tableData: BookedSlotModel[] = JSON.parse(
+      (await AsyncStorage.getItem(TABLE_KEY)) || "[]",
+    )
+    // 过滤掉要删除的行
+    const updatedTable = tableData.filter((item) => item.id !== id)
+    await AsyncStorage.setItem(TABLE_KEY, JSON.stringify(updatedTable))
+    return true
+  } catch (error) {
+    console.error("删除行失败：", error)
+    return false
+  }
+}
+
+/**
  * 清空表格
  */
 export const clearTable = async () => {

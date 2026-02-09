@@ -1,6 +1,14 @@
 // __tests__/utils.test.ts
-import { filterDoctorOfWeekDay,getWeekDateArray,getTimeSlot,equalsIgnoreTime} from "../app/utils/utils";
-import { DoctorModel } from "../app/models/types";
+import { 
+  filterDoctorOfWeekDay,
+  getWeekDateArray,
+  getTimeSlot,
+  equalsIgnoreTime,
+  isEarlyByDay,
+  weekday,
+  getDateDay
+} from "@/app/utils/utils";
+import { DoctorModel } from "@/app/models/types";
 
 describe("getWeekDateArray", () => {
   // 测试正常情况：输入一个日期，返回正确的周日期数组
@@ -424,5 +432,168 @@ describe("equalsIgnoreTime", () => {
     const date1 = new Date("invalid-date");
     const date2 = new Date("2023-10-01T10:00:00Z");
     expect(() => equalsIgnoreTime(date1, date2)).toThrow();
+  });
+});
+
+
+describe("isEarlyByDay", () => {
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date("2023-10-01T10:00:00"));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it("should return true when date is in previous year", () => {
+    const date = new Date("2022-10-01");
+    expect(isEarlyByDay(date)).toBe(true);
+  });
+
+  it("should return true when date is in previous month of same year", () => {
+    const date = new Date("2023-09-15");
+    expect(isEarlyByDay(date)).toBe(true);
+  });
+
+  it("should return true when date is earlier day of same month", () => {
+    const date = new Date("2023-09-30");
+    expect(isEarlyByDay(date)).toBe(true);
+  });
+
+  it("should return false when date is same day", () => {
+    const date = new Date("2023-10-01");
+    expect(isEarlyByDay(date)).toBe(false);
+  });
+
+  it("should return false when date is later day of same month", () => {
+    const date = new Date("2023-10-02");
+    expect(isEarlyByDay(date)).toBe(false);
+  });
+
+  it("should return false when date is in future month of same year", () => {
+    const date = new Date("2023-11-01");
+    expect(isEarlyByDay(date)).toBe(false);
+  });
+
+  it("should return false when date is in future year", () => {
+    const date = new Date("2024-10-01");
+    expect(isEarlyByDay(date)).toBe(false);
+  });
+
+  it("should handle leap year dates correctly", () => {
+    jest.useFakeTimers().setSystemTime(new Date("2024-03-01T10:00:00"));
+    const date = new Date("2024-02-29"); // Leap day
+    expect(isEarlyByDay(date)).toBe(true);
+    jest.useRealTimers();
+  });
+});
+
+describe("weekday", () => {
+  it("should return short weekday name in English", () => {
+    const date = new Date("2023-10-01"); // Sunday
+    const result = weekday(date, "en-US");
+    expect(result).toBe("Sun");
+  });
+
+  it("should return short weekday name in Chinese", () => {
+    const date = new Date("2023-10-02"); // Monday
+    const result = weekday(date, "zh-CN");
+    expect(result).toBe("周一");
+  });
+
+  it("should return short weekday name in Spanish", () => {
+    const date = new Date("2023-10-03"); // Tuesday
+    const result = weekday(date, "es-ES");
+    expect(result).toBe("mar");
+  });
+
+  it("should handle all weekdays in English", () => {
+    const sunday = new Date("2023-10-01");
+    const monday = new Date("2023-10-02");
+    const tuesday = new Date("2023-10-03");
+    const wednesday = new Date("2023-10-04");
+    const thursday = new Date("2023-10-05");
+    const friday = new Date("2023-10-06");
+    const saturday = new Date("2023-10-07");
+
+    expect(weekday(sunday, "en-US")).toBe("Sun");
+    expect(weekday(monday, "en-US")).toBe("Mon");
+    expect(weekday(tuesday, "en-US")).toBe("Tue");
+    expect(weekday(wednesday, "en-US")).toBe("Wed");
+    expect(weekday(thursday, "en-US")).toBe("Thu");
+    expect(weekday(friday, "en-US")).toBe("Fri");
+    expect(weekday(saturday, "en-US")).toBe("Sat");
+  });
+
+  it("should use default locale when not provided", () => {
+    const date = new Date("2023-10-01");
+    const result = weekday(date);
+    expect(result).toBe("Sun");
+  });
+});
+
+describe("getDateDay", () => {
+  it("should return day number in English", () => {
+    const date = new Date("2023-10-01");
+    const result = getDateDay(date, "en-US");
+    expect(result).toBe("1");
+  });
+
+  it("should handle single digit days", () => {
+    const date = new Date("2023-10-05");
+    const result = getDateDay(date, "en-US");
+    expect(result).toBe("5");
+  });
+
+  it("should handle double digit days", () => {
+    const date = new Date("2023-10-25");
+    const result = getDateDay(date, "en-US");
+    expect(result).toBe("25");
+  });
+
+  it("should handle last day of month", () => {
+    const date = new Date("2023-10-31");
+    const result = getDateDay(date, "en-US");
+    expect(result).toBe("31");
+  });
+
+  it("should handle first day of month", () => {
+    const date = new Date("2023-10-01");
+    const result = getDateDay(date, "en-US");
+    expect(result).toBe("1");
+  });
+
+  it("should use default locale when not provided", () => {
+    const date = new Date("2023-10-10");
+    const result = getDateDay(date);
+    expect(result).toBe("10");
+  });
+
+  it("should handle different months", () => {
+    const january = new Date("2023-01-15");
+    const february = new Date("2023-02-28");
+    const march = new Date("2023-03-31");
+    const april = new Date("2023-04-30");
+    const may = new Date("2023-05-15");
+    const june = new Date("2023-06-20");
+    const july = new Date("2023-07-04");
+    const august = new Date("2023-08-15");
+    const september = new Date("2023-09-10");
+    const october = new Date("2023-10-25");
+    const november = new Date("2023-11-30");
+    const december = new Date("2023-12-25");
+
+    expect(getDateDay(january, "en-US")).toBe("15");
+    expect(getDateDay(february, "en-US")).toBe("28");
+    expect(getDateDay(march, "en-US")).toBe("31");
+    expect(getDateDay(april, "en-US")).toBe("30");
+    expect(getDateDay(may, "en-US")).toBe("15");
+    expect(getDateDay(june, "en-US")).toBe("20");
+    expect(getDateDay(july, "en-US")).toBe("4");
+    expect(getDateDay(august, "en-US")).toBe("15");
+    expect(getDateDay(september, "en-US")).toBe("10");
+    expect(getDateDay(october, "en-US")).toBe("25");
+    expect(getDateDay(november, "en-US")).toBe("30");
+    expect(getDateDay(december, "en-US")).toBe("25");
   });
 });
