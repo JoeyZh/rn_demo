@@ -23,6 +23,7 @@ export const useInit = () => {
   const toggleOffline = () => {
     const toggle = !offline;
     dispatch(setOffline(toggle))
+    setOfflineAsync(toggle)
   }
 
   useEffect(() => {

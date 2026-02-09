@@ -44,12 +44,7 @@ export const initTable = async () => {
  */
 export const addAllRow = async (row: DoctorModel[]) => {
   try {
-    // 1. 读取现有表格数据（数组），并显式指定类型
-    const tableData: DoctorModel[] = JSON.parse(
-      (await AsyncStorage.getItem(DOCTORS_TABLE_KEY)) || "[]",
-    )
-    // 4. 存回 AsyncStorage
-    await AsyncStorage.setItem(DOCTORS_TABLE_KEY, JSON.stringify(tableData))
+    await AsyncStorage.setItem(DOCTORS_TABLE_KEY, JSON.stringify(row))
     return true
   } catch (error) {
     console.error("新增行失败：", error)

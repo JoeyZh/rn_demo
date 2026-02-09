@@ -41,8 +41,13 @@ export const AppointmentItem = ({
         {/* 可用时间信息 */}
 
         <View style={styles.infoRow}>
-          <Text style={styles.label}>Date:</Text>
+          <Text style={styles.label}>Date</Text>
           <Text style={styles.value}>{mergeSlotDate(appointment.timeSlot)}</Text>
+        </View>
+
+        <View style={styles.infoRow}>
+          <Text style={styles.label}>Operate</Text>
+          <Text style={styles.value}>{new Date(appointment.timeSlot.date).toLocaleString("en-US")}</Text>
         </View>
       </View>
 
