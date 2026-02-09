@@ -1,19 +1,31 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native"
+import { View, Text, ScrollView, StyleSheet, Alert } from "react-native"
 import { TimeSlotList } from "./components/TimeSlotList"
 import { DoctorsItem } from "./components/DoctorsItem"
 import { useTimeSlot } from "./hooks/useTimeSlot"
 import { useRouter } from "expo-router"
+import { use, useActionState } from "react"
+import { useBookAlert } from "./hooks/useBookAlert"
 
 export default function DoctorProfilesScreen() {
   const router = useRouter()
-  const { timeSlots, doctor, bookSlot } = useTimeSlot()
+  const { timeSlots, doctor, bookSlot, currentSlot } = useTimeSlot()
+  const { show } = useBookAlert({
+    onConfirm: () => {
+      bookSlot()
+    },
+    onCancel: () => {
+      currentSlot.current = ""
+    },
+  })
 
   // 如果没有选中医生，显示提示信息
   if (!doctor) {
     return (
       <View style={styles.emptyContainer}>
         <Text style={styles.emptyText}>No doctor selected</Text>
-        <Text style={styles.emptySubText}>Please select a doctor from the doctors list</Text>
+        <Text style={styles.emptySubText}>
+          Please select a doctor from the doctors list
+        </Text>
       </View>
     )
   }
@@ -23,7 +35,16 @@ export default function DoctorProfilesScreen() {
       <DoctorsItem doctor={doctor} />
       <View style={styles.timeSlotSection}>
         <Text style={styles.sectionTitle}>Available Time Slots</Text>
-        <TimeSlotList timeSlots={timeSlots || []} onTimeSlotPress={bookSlot} />
+        <TimeSlotList
+          timeSlots={timeSlots || []}
+          onTimeSlotPress={(time) => {
+            currentSlot.current = time
+            show(
+              "Appointment",
+              `Are you sure you want to book the appointment for ${time}?`,
+            )
+          }}
+        />
       </View>
     </ScrollView>
   )

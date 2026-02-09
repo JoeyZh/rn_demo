@@ -6,7 +6,7 @@ export const DoctorsItem = ({ doctor }: { doctor: DoctorModel }) => {
   const { gotoDetail } = useBook()
 
   return (
-    <View style={styles.card}>``
+    <View style={styles.card}>
       {/* 医生信息区域 */}
       <View style={styles.infoContainer}>
         {/* 医生姓名和图标 */}

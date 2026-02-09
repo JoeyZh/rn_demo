@@ -10,11 +10,3 @@ export const listDoctors = async (): Promise<DoctorModel[]> => {
   return doctors;
 };
 
-
-export const getAvailableSlots = async (doctorId: string): Promise<string[]> => {
-  const response = await fetch(`/api/doctors/${doctorId}/slots`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch available slots');
-  }
-  return response.json();
-};

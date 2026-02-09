@@ -3,9 +3,22 @@ import { MyAppointmentModel } from "@/app/models/types"
 
 export const AppointmentItem = ({
   appointment,
+  onCancel,
 }: {
   appointment: MyAppointmentModel
+  onCancel: (appointment: MyAppointmentModel) => void
 }) => {
+
+  const stateStyle = (status: string) => {
+    switch (status) {
+      case "scheduled":
+        return styles.stateBooked;
+      case "canceled":
+        return styles.stateCancel;
+      default:
+        return {};
+    }
+  };
   return (
     <View style={styles.card}>
       {/* 医生信息区域 */}
@@ -13,16 +26,16 @@ export const AppointmentItem = ({
         <View style={styles.headRow}>
           <View style={styles.nameRow}>
             <Text style={styles.doctorIcon}>👨‍⚕️</Text>
-            <Text style={styles.name}>{appointment.doctor.name}</Text>
+            <Text style={styles.name}>{appointment.doctorName ??''}</Text>
           </View>
-          <Text style={styles.state}>{appointment.status}</Text>
+          <Text style={[styles.state, stateStyle(appointment.status)]}>{appointment.status}</Text>
         </View>
         {/* 医生姓名和图标 */}
 
         {/* 时区信息 */}
         <View style={styles.infoRow}>
           <Text style={styles.label}>Time Zone</Text>
-          <Text style={styles.value}>{appointment.doctor.timezone}</Text>
+          <Text style={styles.value}>{appointment.doctorTimeZone??''}</Text>
         </View>
         {/* 可用时间信息 */}
 
@@ -32,7 +45,9 @@ export const AppointmentItem = ({
         </View>
       </View>
 
-      <Button title='Cancel' onPress={() => () => {}} color='#007AFF' />
+      {appointment.status === "scheduled" && (
+        <Button title='Cancel BOOKING' onPress={() => () => {}} color='#007AFF' />
+      )}
     </View>
   )
 }
@@ -63,7 +78,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   state: {
-    fontSize: 12,
+    fontSize: 14,
+    padding: 4,
+    color: "#1a1a1a",
+  },
+  stateBooked:{
+    color: "#007AFF",
+  },
+  stateCancel:{
     color: "#1a1a1a",
   },
   doctorIcon: {

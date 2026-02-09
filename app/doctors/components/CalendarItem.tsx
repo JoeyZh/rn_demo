@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { isEarly } from "@/app/utils/utils";
 
 export const CalendarItem = ({
   date,
@@ -23,9 +24,12 @@ export const CalendarItem = ({
   const weekdayFormatter = new Intl.DateTimeFormat(locale, { weekday: "short" });
   const weekday = weekdayFormatter.format(date);
 
+  const disabled = isEarly(date);
+  
+
  return (
     <TouchableOpacity
-      style={[styles.card, isSelected && styles.selectedCard]} // 动态应用选中样式
+      style={[styles.card, isSelected && styles.selectedCard ,disabled && styles.disabledCard]} // 动态应用选中样式
       onPress={() => setSelectedDate(date)}
     >
       <Text style={[styles.weekdayText, isSelected  && styles.selectedWeekdayText]}>
@@ -55,6 +59,10 @@ const styles = StyleSheet.create({
   selectedCard: {
     backgroundColor: "#007AFF", // 选中时的背景色（蓝色）
     shadowColor: "#007AFF", // 选中时的阴影颜色
+  },
+  disabledCard: {
+    opacity: 0.7, // 禁用时的透明度
+    elevation: 5,
   },
   dateText: {
     fontSize: 24, // 日期字体大小

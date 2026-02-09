@@ -87,3 +87,18 @@ export const getTimeSlot = (doctor: DoctorModel | null, date: Date | null = new 
 
   return timeSlots;
 };
+
+export const equalsIgnoreTime = (date1: Date, date2: Date): boolean => {
+  const formatDate = (d: Date) => d.toISOString().split('T')[0]; // 转换为 YYYY-MM-DD 格式
+  return formatDate(date1) === formatDate(date2);
+};
+
+export const isEarly = (date: Date): boolean => {
+  const now = new Date();
+  // 获取 date 的年月日部分，年月日需要小于 now 的年月日部分
+  return (
+    date.getFullYear() < now.getFullYear() ||
+    (date.getFullYear() === now.getFullYear() && date.getMonth() < now.getMonth()) ||
+    (date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth() && date.getDate() < now.getDate())
+  );
+};

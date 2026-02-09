@@ -16,7 +16,22 @@ export interface TimeSlotModel {
 export interface MyAppointmentModel {
   // id: string;
   // patientId: string;
-  doctor: DoctorModel;
-  timeSlot: TimeSlotModel;
-  status: 'scheduled' | 'completed' | 'canceled';
+  doctorName: string;
+  doctorTimeZone:string;
+  timeSlot: BookedSlotModel;
+  status: BookedStatus;
+}
+
+export type BookedStatus = 'scheduled' | 'completed' | 'canceled' | '';
+export interface BookedSlotModel {
+  // doctorName_date_time. 
+  id?: string ;
+  doctorName: string;
+  doctorTimeZone: string;
+  // 时间戳
+  date: number;
+  time: string;
+  // 时间戳
+  bookedTime: number;
+  isBooked: boolean;
 }

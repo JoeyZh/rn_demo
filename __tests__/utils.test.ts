@@ -1,5 +1,5 @@
 // __tests__/utils.test.ts
-import { filterDoctorOfWeekDay,getWeekDateArray,getTimeSlot} from "../app/utils/utils";
+import { filterDoctorOfWeekDay,getWeekDateArray,getTimeSlot,equalsIgnoreTime} from "../app/utils/utils";
 import { DoctorModel } from "../app/models/types";
 
 describe("getWeekDateArray", () => {
@@ -380,5 +380,49 @@ describe("getTimeSlot", () => {
     expect(() => getTimeSlot(doctor, date)).toThrow(
       "Invalid time range: available_at must be earlier than available_until"
     );
+  });
+});
+
+describe("equalsIgnoreTime", () => {
+  test("should return true for dates with the same year, month, and day", () => {
+    const date1 = new Date("2023-10-01T10:00:00Z");
+    const date2 = new Date("2023-10-01T15:30:00Z");
+    expect(equalsIgnoreTime(date1, date2)).toBe(true);
+  });
+
+  test("should return false for dates with different years", () => {
+    const date1 = new Date("2022-10-01T10:00:00Z");
+    const date2 = new Date("2023-10-01T10:00:00Z");
+    expect(equalsIgnoreTime(date1, date2)).toBe(false);
+  });
+
+  test("should return false for dates with different months", () => {
+    const date1 = new Date("2023-09-01T10:00:00Z");
+    const date2 = new Date("2023-10-01T10:00:00Z");
+    expect(equalsIgnoreTime(date1, date2)).toBe(false);
+  });
+
+  test("should return false for dates with different days", () => {
+    const date1 = new Date("2023-10-01T10:00:00Z");
+    const date2 = new Date("2023-10-02T10:00:00Z");
+    expect(equalsIgnoreTime(date1, date2)).toBe(false);
+  });
+
+  test("should handle edge cases like leap years", () => {
+    const date1 = new Date("2024-02-29T10:00:00Z"); // Leap year
+    const date2 = new Date("2024-02-29T15:00:00Z");
+    expect(equalsIgnoreTime(date1, date2)).toBe(true);
+  });
+
+  test("should handle time zones correctly", () => {
+    const date1 = new Date("2023-10-01T00:00:00Z"); // UTC
+    const date2 = new Date("2023-10-01T23:59:59Z"); // UTC
+    expect(equalsIgnoreTime(date1, date2)).toBe(true);
+  });
+
+  test("should return false for invalid dates", () => {
+    const date1 = new Date("invalid-date");
+    const date2 = new Date("2023-10-01T10:00:00Z");
+    expect(() => equalsIgnoreTime(date1, date2)).toThrow();
   });
 });

@@ -7,7 +7,7 @@ export const TimeSlot = ({ timeSlot,bookSlot }: { timeSlot: TimeSlotModel;bookSl
        style={[styles.container, timeSlot.isBooked && styles.booked]} // 动态应用选中样式
        onPress={() => bookSlot(timeSlot.time)}
      >
-       <Text style={[styles.timeText, timeSlot.isBooked && styles.booked]}>
+       <Text style={[styles.timeText , timeSlot.isBooked && styles.timeBooked]}>
          {timeSlot.time}
        </Text>
      </TouchableOpacity>
@@ -31,12 +31,16 @@ const styles = StyleSheet.create({
   },
   booked: {
     borderWidth: 1,
-    borderColor: "#333",
+    borderColor: "#aaa",
+    backgroundColor: "#f0f0f0",
   },
   timeText: {
     color: "#333",
     fontSize: 14,
     fontWeight: "600",
+  },
+  timeBooked:{
+    color: "#aaa", // 已预约的文本颜色
   },
   bookedText: {
     color: "#888", // 已预约的文本颜色
