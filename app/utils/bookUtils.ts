@@ -63,7 +63,7 @@ export const mergeSlotDate = (item: BookedSlotModel): string => {
   mergedDate.setHours(hours);
   mergedDate.setMinutes(minutes);
   mergedDate.setSeconds(0);
-  return  mergedDate.toLocaleString("en-US",{timeZoneName:"shortOffset"});
+  return  mergedDate.toLocaleString("en-US");
 };
 
 /**
