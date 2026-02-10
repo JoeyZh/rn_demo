@@ -19,7 +19,7 @@ export const useAppointment = () => {
       doctorTimeZone: item.doctorTimeZone,
       timeSlot: item, // 假设 item 对应 timeSlot
       status: item.isBooked
-        ? appointmentStatus(new Date(item.date), item.time)
+        ? appointmentStatus(new Date(item.date), item.time,item.doctorTimeZone)
         : "canceled", // 添加默认状态
     }))
     return list.sort((a, b) => b.timeSlot.bookedTime - a.timeSlot.bookedTime)

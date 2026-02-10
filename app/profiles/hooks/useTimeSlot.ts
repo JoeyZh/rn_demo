@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, use, useRef } from "react"
 import { getTimeSlot, equalsIgnoreTime } from "@/app/utils/utils"
-import { bookedAvailable } from "@/app/utils/bookUtils"
+import { bookedAvailable,HOURS_MILLS,utcInterval } from "@/app/utils/bookUtils"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "@/app/store"
 import { bookTimeSlot } from "@/app/store/doctorSlice"
@@ -77,7 +77,6 @@ export const useTimeSlot = () => {
   }
 
   useEffect(() => {
-    console.log("allBookedList:", allBookedList)
     bookAsyncStorages.addAllRows(allBookedList)
   }, [allBookedList])
 
