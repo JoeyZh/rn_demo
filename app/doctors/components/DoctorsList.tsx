@@ -7,11 +7,13 @@ export const DoctorsList = ({
   loading,
   onLoading,
   gotoDetail,
+  viewOnly
 }: {
   doctors: DoctorModel[]
   loading: boolean
   onLoading: () => void
   gotoDetail: (doctor: DoctorModel) => void
+  viewOnly?: boolean
 }) => {
   return (
     <View>
@@ -25,7 +27,7 @@ export const DoctorsList = ({
         />
       ) : (
         doctors.map((doctor, i) => (
-          <DoctorsItem key={i} doctor={doctor} gotoDetail={gotoDetail} />
+          <DoctorsItem key={i} doctor={doctor} gotoDetail={gotoDetail} viewOnly={viewOnly} />
         ))
       )}
     </View>

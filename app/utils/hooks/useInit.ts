@@ -1,9 +1,16 @@
 import { useCallback, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { initBookedTimeSlots, selectDate,setOffline } from "@/app/store/doctorSlice"
+import {
+  initBookedTimeSlots,
+  selectDate,
+  setOffline,
+} from "@/app/store/doctorSlice"
 import { initTable, getAllRows } from "@/app/store/bookAsyncStorages"
 import { RootState } from "@/app/store"
-import { setOffline as setOfflineAsync,getOffline} from "@/app/store/doctorsAsyncStorages"
+import {
+  setOffline as setOfflineAsync,
+  getOffline,
+} from "@/app/store/doctorsAsyncStorages"
 export const useInit = () => {
   const dispatch = useDispatch()
 
@@ -13,17 +20,15 @@ export const useInit = () => {
     getOffline().then(async (offline) => {
       dispatch(setOffline(offline))
     })
-    initTable().then(() => {
-      getAllRows().then((allBookedList) => {
-        dispatch(initBookedTimeSlots(allBookedList))
-      })
+
+    getAllRows().then((allBookedList) => {
+      dispatch(initBookedTimeSlots(allBookedList))
     })
   }, [])
 
   const toggleOffline = () => {
-    const toggle = !offline;
+    const toggle = !offline
     dispatch(setOffline(toggle))
-    setOfflineAsync(toggle)
   }
 
   useEffect(() => {
@@ -32,5 +37,10 @@ export const useInit = () => {
       dispatch(initBookedTimeSlots([]))
     }
   }, [])
-  return { toggleOffline ,offline}
+  useEffect(() => {
+    console.log("change offline", offline)
+    setOfflineAsync(offline)
+  }, [offline])
+
+  return { toggleOffline, offline }
 }

@@ -12,7 +12,7 @@ MedScheduler 是一个基于 React Native 构建的医疗预约管理应用。�
 
 确保你已经安装以下工具：
 
-- Node.js (v16 或更高版本)
+- Node.js (v16 或更高版本,笔者是22.14.0)
 - npm 或 yarn 或 pnpm
 - React Native CLI 或 Expo CLI
 - Android Studio / Xcode (用于模拟器)

@@ -1,5 +1,6 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native"
 import { DoctorModel } from "@/app/models/types"
+import { timeZoneToUTC } from "@/app/utils/bookUtils"
 export const DoctorsItem = ({ doctor }: { doctor: DoctorModel }) => {
 
   return (
@@ -14,7 +15,7 @@ export const DoctorsItem = ({ doctor }: { doctor: DoctorModel }) => {
         {/* 时区信息 */}
         <View style={styles.infoRow}>
           <Text style={styles.label}>Time Zone</Text>
-          <Text style={styles.value}>{doctor.timezone}</Text>
+          <Text style={styles.value}>{`${doctor.timezone} (${timeZoneToUTC(doctor.timezone)})`}</Text>
         </View>
          <View style={styles.infoRow}>
                   <Text style={styles.label}>Time:</Text>

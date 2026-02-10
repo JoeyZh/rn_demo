@@ -63,5 +63,52 @@ export const mergeSlotDate = (item: BookedSlotModel): string => {
   mergedDate.setHours(hours);
   mergedDate.setMinutes(minutes);
   mergedDate.setSeconds(0);
-  return  mergedDate.toLocaleString("en-US");
+  return  mergedDate.toLocaleString("en-US",{timeZoneName:"shortOffset"});
 };
+
+/**
+ * 根据时区获取 UTC 偏移量，例如 Asia/Shanghai => UTC+8
+ * @param timezone 时区字符串，如 "Asia/Shanghai"
+ */
+export const timeZoneToUTC = (timezone: string): string => {
+  try {
+    // 创建一个基于指定时区的日期对象
+    const date = new Date();
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezone,
+      timeZoneName: "shortOffset", // 获取时区偏移量
+    });
+
+    // 提取时区偏移量部分
+    const parts = formatter.formatToParts(date);
+    const offsetPart = parts.find((part) => part.type === "timeZoneName");
+
+    if (!offsetPart) {
+      throw new Error(`无法解析时区: ${timezone}`);
+    }
+
+    // 格式化为 UTC±X 形式
+    const offset = offsetPart.value.replace("GMT", "UTC");
+    return offset;
+  } catch (error) {
+    console.error("时区解析失败:", error);
+    return ""; // 返回空字符串表示解析失败
+  }
+};
+
+export const formattedDateOfUTC = (date: Date): string => {
+  // 获取手机本地时区 
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  return date.toLocaleString("en-US",{timeZoneName:"shortOffset"});
+
+  // const options = {
+  //   year: "numeric",
+  //   month: "2-digit",
+  //   day: "2-digit",
+  //   hour: "2-digit",
+  //   minute: "2-digit",
+  //   second: "2-digit",
+  //   timeZone: timeZone,
+  // };
+  // return new Intl.DateTimeFormat("en-US", options).format(date);
+}

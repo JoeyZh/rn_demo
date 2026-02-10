@@ -4,19 +4,22 @@ import React from "react"
 import { View, ScrollView, StyleSheet, Text } from "react-native"
 import { CalendarItem } from "./CalendarItem"
 import { useCalendar } from "../hooks/useCalendar"
+import { timeZoneToUTC } from "@/app/utils/bookUtils"
 
 // 为 setSelectedDate 显式声明类型
 export const WeeklyCalendar = ({
   changeDate,
+  timezone,
 }: {
   changeDate: (date: Date) => void
+  timezone: string
 }) => {
   // 数据源：包含 7 个日历项
   const { dateArray, isSelected, setSelectedDate } = useCalendar(changeDate) // 获取当前日期所在周的日期数组
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Calendar</Text>
+      <Text style={styles.title}>{`Calendar (${timeZoneToUTC(timezone)})`}</Text>
 
       <ScrollView
         horizontal // 启用横向滚动

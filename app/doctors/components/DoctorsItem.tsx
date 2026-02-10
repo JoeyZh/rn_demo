@@ -1,8 +1,7 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native"
 import { DoctorModel } from "@/app/models/types"
-import { useBook } from "../hooks/useBook"
-
-export const DoctorsItem = ({ doctor,gotoDetail}: { doctor: DoctorModel , gotoDetail: (doctor: DoctorModel) => void }) => {
+import { timeZoneToUTC } from "@/app/utils/bookUtils"
+export const DoctorsItem = ({ doctor,gotoDetail,viewOnly}: { doctor: DoctorModel , gotoDetail: (doctor: DoctorModel) => void,viewOnly?: boolean }) => {
 
   return (
     <View style={styles.card}>
@@ -16,7 +15,7 @@ export const DoctorsItem = ({ doctor,gotoDetail}: { doctor: DoctorModel , gotoDe
         {/* 时区信息 */}
         <View style={styles.infoRow}>
           <Text style={styles.label}>Time Zone</Text>
-          <Text style={styles.value}>{doctor.timezone}</Text>
+          <Text style={styles.value}>{`${doctor.timezone} (${timeZoneToUTC(doctor.timezone)})`}</Text>
         </View>
         {/* 可用时间信息 */}
 
@@ -29,7 +28,7 @@ export const DoctorsItem = ({ doctor,gotoDetail}: { doctor: DoctorModel , gotoDe
       </View>
 
       <Button
-        title='Book Now'
+        title={viewOnly?'View':'Book Now'}
         onPress={() => gotoDetail(doctor)}
         color='#007AFF'
       />

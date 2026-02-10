@@ -4,12 +4,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DoctorModel, BookedSlotModel } from "../models/types"
 import { equalsIgnoreTime } from "@/app/utils/utils"
 import { generateUniqueId } from "../utils/bookUtils"
+import { getOffline } from "./doctorsAsyncStorages"
 
 interface DoctorState {
   selectedDoctor: DoctorModel | null
   selectedDate: number // 新增：选中的日期 时间戳
   bookedTimeSlots: BookedSlotModel[] // 医生姓名 -> 日期 -> 时间槽数组
   offline: boolean // 离线状态
+  onlyView: boolean
 }
 
 const initialState: DoctorState = {
@@ -18,12 +20,16 @@ const initialState: DoctorState = {
   // 改成通过 doctorsAsyncStorates 获取，初始值为空数组
   bookedTimeSlots: [],
   offline: false,
+  onlyView: false
 }
 
 export const doctorSlice = createSlice({
   name: "doctor",
   initialState,
   reducers: {
+    onlyView: (state, action: PayloadAction<boolean>) => {
+      state.onlyView = action.payload
+    },
     setOffline: (state, action: PayloadAction<boolean>) => {
       state.offline = action.payload
     },
@@ -119,6 +125,7 @@ export const doctorSlice = createSlice({
   },
 })
 
+
 export const {
   selectDoctor,
   clearSelectedDoctor,
@@ -127,6 +134,7 @@ export const {
   bookTimeSlot,
   cancelTimeSlot,
   initBookedTimeSlots,
-  setOffline
+  setOffline,
+  onlyView
 } = doctorSlice.actions
 export const doctorReducer = doctorSlice.reducer

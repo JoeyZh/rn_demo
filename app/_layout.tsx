@@ -54,11 +54,11 @@ function RootLayoutNav() {
     <Provider store={store}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="tabs" options={{ headerShown: false }} />
-          <Stack.Screen name="doctors" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="homes" options={{ headerShown: false }} />
+          <Stack.Screen name="doctors" options={{ presentation: 'modal',title: 'Doctors'  }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="appointments" options={{ presentation: 'modal' }} />
-          <Stack.Screen name="profiles" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="appointments" options={{ presentation: 'modal',title: 'My Appointments' }} />
+          <Stack.Screen name="profiles" options={{ presentation: 'modal',title: 'Doctor Profile' }} />
 
         </Stack>
       </ThemeProvider>

@@ -1,6 +1,6 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from "react-native"
 import { MyAppointmentModel } from "@/app/models/types"
-import { mergeSlotDate } from "@/app/utils/bookUtils"
+import { mergeSlotDate ,formattedDateOfUTC,timeZoneToUTC} from "@/app/utils/bookUtils"
 
 export const AppointmentItem = ({
   appointment,
@@ -36,7 +36,7 @@ export const AppointmentItem = ({
         {/* 时区信息 */}
         <View style={styles.infoRow}>
           <Text style={styles.label}>Time Zone</Text>
-          <Text style={styles.value}>{appointment.doctorTimeZone??''}</Text>
+          <Text style={styles.value}>{`${appointment.doctorTimeZone} (${timeZoneToUTC(appointment.doctorTimeZone)})`}</Text>
         </View>
         {/* 可用时间信息 */}
 
@@ -47,7 +47,7 @@ export const AppointmentItem = ({
 
         <View style={styles.infoRow}>
           <Text style={styles.label}>Operate</Text>
-          <Text style={styles.value}>{new Date(appointment.timeSlot.date).toLocaleString("en-US")}</Text>
+          <Text style={styles.value}>{formattedDateOfUTC(new Date(appointment.timeSlot.bookedTime))}</Text>
         </View>
       </View>
 

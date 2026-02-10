@@ -9,14 +9,16 @@ interface TimeSlotListProps {
   timeSlots: TimeSlotModel[];
   onTimeSlotPress: (time: string) => void;
   outDate: outDateFunc;
+  readonly?: boolean;
 }
 
-export const TimeSlotList: React.FC<TimeSlotListProps> = ({ date, timeSlots, onTimeSlotPress, outDate }) => {
+export const TimeSlotList: React.FC<TimeSlotListProps> = ({ date, timeSlots, onTimeSlotPress, outDate,readonly}) => {
+
   return (
     <View style={styles.container}>
       {timeSlots.map((timeSlot,i) => (
         <TimeSlot
-          outDate={outDate(date, timeSlot.time, timeSlot.timezone)}
+          outDate={readonly || outDate(date, timeSlot.time, timeSlot.timezone)}
           key={i}
           timeSlot={timeSlot}
           bookSlot={onTimeSlotPress}

@@ -1,10 +1,11 @@
 
 import { StyleSheet, Text, TouchableOpacity } from "react-native"
 import { TimeSlotModel } from "@/app/models/types"
-export const TimeSlot = ({ timeSlot,bookSlot ,outDate}: { timeSlot: TimeSlotModel;bookSlot:(time:string)=>void, outDate:boolean }) => {
+export const TimeSlot = ({ timeSlot,bookSlot ,outDate,readonly}: { timeSlot: TimeSlotModel;bookSlot:(time:string)=>void, outDate:boolean ,readonly?:boolean}) => {
+
   return (
   <TouchableOpacity
-       disabled={outDate || timeSlot.isBooked} // 如果时间已被预约或过期，则禁用按钮
+       disabled={readonly || outDate || timeSlot.isBooked} // 如果时间已被预约或过期，则禁用按钮
        style={[styles.container, timeSlot.isBooked && styles.booked, outDate && styles.outDate]} // 动态应用选中样式
        onPress={() => bookSlot(timeSlot.time)}
      >

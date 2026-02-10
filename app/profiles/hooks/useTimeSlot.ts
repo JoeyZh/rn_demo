@@ -14,6 +14,8 @@ export const useTimeSlot = () => {
     (state: RootState) => state.doctor.selectedDate,
   )
 
+  const onlyView = useSelector((state: RootState) => state.doctor.onlyView)
+
   const date = useMemo(() => new Date(selectedDate), [selectedDate])
   const allBookedList = useSelector(
     (state: RootState) => state.doctor.bookedTimeSlots,
@@ -79,5 +81,5 @@ export const useTimeSlot = () => {
     bookAsyncStorages.addAllRows(allBookedList)
   }, [allBookedList])
 
-  return { timeSlots, bookSlot, doctor, isBooked, currentSlot, canBooked, date }
+  return { timeSlots, bookSlot, doctor, isBooked, currentSlot, canBooked, date,onlyView }
 }

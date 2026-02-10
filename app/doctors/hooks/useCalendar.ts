@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
-import { getWeekDateArray, equalsIgnoreTime } from "@/app/utils/utils"
+import { getWeekDateArray, equalsIgnoreTime, isEarlyByDay } from "@/app/utils/utils"
 import { useDispatch, useSelector } from "react-redux"
-import { selectDate } from "@/app/store/doctorSlice"
+import { selectDate,onlyView } from "@/app/store/doctorSlice"
 import { RootState } from "@/app/store"
 
 export const useCalendar = (changeDate: (date: Date) => void) => {
@@ -13,6 +13,7 @@ export const useCalendar = (changeDate: (date: Date) => void) => {
     const index = dateArray.findIndex((d) => equalsIgnoreTime(d, date))
     if (index !== -1) {
       setSelected(index)
+      dispatch(onlyView(isEarlyByDay(date)))
       changeDate(date)
       dispatch(selectDate(date.getTime())) // 传递时间戳
     }
