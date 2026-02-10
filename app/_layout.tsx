@@ -59,6 +59,7 @@ function RootLayoutNav() {
           <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
           <Stack.Screen name="appointments" options={{ presentation: 'modal',title: 'My Appointments' }} />
           <Stack.Screen name="profiles" options={{ presentation: 'modal',title: 'Doctor Profile' }} />
+          <Stack.Screen name="storebooktest" options={{ presentation: 'modal',title: 'Store Book Test' }} />
 
         </Stack>
       </ThemeProvider>

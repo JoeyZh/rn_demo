@@ -29,6 +29,10 @@ export const predicateBookedByDoctorAndDate = (
 
 export const appointmentStatus = (timeSlot:BookedSlotModel): BookedStatus => {
   const { date, time ,doctorTimeZone} = timeSlot
+  console.log("appointmentStatus data",date,time,doctorTimeZone)
+  if(!timeSlot){
+    return ""  as BookedStatus;
+  }
   const now = new Date();
   // date获取日期值，time 是时间 比如 10:00 或 10:00PM， 拼接起来组成一个新的时间 newDate
   const bookDate = new Date(date);
@@ -38,7 +42,7 @@ export const appointmentStatus = (timeSlot:BookedSlotModel): BookedStatus => {
   const localeTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const interval = utcInterval(localeTimeZone,doctorTimeZone);
   bookDate.setTime(bookDate.getTime() - interval)
-  console.log("appointmentStatus bookDate:", bookDate.toLocaleString(), "now:", now.toLocaleString());
+  // console.log("appointmentStatus bookDate:", bookDate.toLocaleString(), "now:", now.toLocaleString());
   
   if (bookDate < now) {
     return "completed";

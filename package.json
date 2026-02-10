@@ -1,8 +1,10 @@
 {
   "name": "medscheduler",
   "main": "expo-router/entry",
-  "license": "0BSD",
+  "license": "MIT LICENSE",
   "version": "1.0.0",
+  "description": "A new Expo demo project.",
+  "author": "Joeyzh  <joeyzhyee@gmail.com>",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
