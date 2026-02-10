@@ -5,6 +5,8 @@
 
 MedScheduler is a medical appointment management application built with React Native. It enables users to view doctor information, book time slots, and manage their appointment list. This project demonstrates core functionalities such as handling time zone differences, time calculations, and state persistence in cross-platform mobile applications, adopting the Domain-Driven Design (DDD) pattern.
 
+https://github.com/user-attachments/assets/58b6f279-aaa6-41c8-bf49-4ca67833b320
+
 ![demo video](https://github.com/user-attachments/assets/58b6f279-aaa6-41c8-bf49-4ca67833b320)
 
 
