@@ -9,6 +9,7 @@ import {
   cancelTimeSlot,
   initBookedTimeSlots,
   setOffline,
+  onlyView,
 } from "../../app/store/doctorSlice";
 import { DoctorModel, BookedSlotModel } from "../../app/models/types";
 
@@ -33,16 +34,24 @@ describe("doctorSlice", () => {
 
   const initialState = {
     selectedDoctor: null,
-    selectedDate: Date.now(),
+    selectedDate: 1770715894599,
     bookedTimeSlots: [],
     offline: false,
+    onlyView: false,
   };
 
   describe("initial state", () => {
-    test("should return the initial state", () => {
-      expect(doctorReducer(undefined, { type: "unknown" })).toEqual(
-        initialState
-      );
+    test("should return the initial state with correct structure", () => {
+      const state = doctorReducer(undefined, { type: "unknown" });
+      expect(state).toEqual({
+        selectedDoctor: null,
+        selectedDate: expect.any(Number),
+        bookedTimeSlots: [],
+        offline: false,
+        onlyView: false,
+      });
+      // Verify selectedDate is a valid timestamp
+      expect(state.selectedDate).toBeGreaterThan(0);
     });
   });
 
@@ -60,6 +69,38 @@ describe("doctorSlice", () => {
         action
       );
       expect(state.offline).toBe(false);
+    });
+  });
+
+  describe("onlyView", () => {
+    test("should set onlyView status to true", () => {
+      const action = onlyView(true);
+      const state = doctorReducer(initialState, action);
+      expect(state.onlyView).toBe(true);
+    });
+
+    test("should set onlyView status to false", () => {
+      const action = onlyView(false);
+      const state = doctorReducer(
+        { ...initialState, onlyView: true },
+        action
+      );
+      expect(state.onlyView).toBe(false);
+    });
+
+    test("should preserve other state properties when setting onlyView", () => {
+      const stateWithData = {
+        ...initialState,
+        selectedDoctor: mockDoctor,
+        selectedDate: 1696118400000,
+        offline: true,
+      };
+      const action = onlyView(true);
+      const state = doctorReducer(stateWithData, action);
+      expect(state.onlyView).toBe(true);
+      expect(state.selectedDoctor).toEqual(mockDoctor);
+      expect(state.selectedDate).toBe(1696118400000);
+      expect(state.offline).toBe(true);
     });
   });
 
@@ -311,6 +352,75 @@ describe("doctorSlice", () => {
     });
   });
 
+  describe("edge cases", () => {
+    test("should handle bookTimeSlot with same doctor and time but different dates", () => {
+      const firstDateTime = 1696118400000; // 2023-10-01
+      const secondDateTime = 1696204800000; // 2023-10-02
+      const time = "10:00";
+      
+      const state = doctorReducer(
+        doctorReducer(
+          initialState,
+          bookTimeSlot({ doctor: mockDoctor, dateTime: firstDateTime, time })
+        ),
+        bookTimeSlot({ doctor: mockDoctor, dateTime: secondDateTime, time })
+      );
+      
+      expect(state.bookedTimeSlots).toHaveLength(2);
+      expect(state.bookedTimeSlots[0].date).toBe(firstDateTime);
+      expect(state.bookedTimeSlots[1].date).toBe(secondDateTime);
+    });
+
+    test("should handle bookTimeSlot with invalid time", () => {
+      const dateTime = 1696118400000;
+      const time = "invalid-time";
+      
+      const action = bookTimeSlot({
+        doctor: mockDoctor,
+        dateTime,
+        time,
+      });
+      
+      const state = doctorReducer(initialState, action);
+      expect(state.bookedTimeSlots).toHaveLength(1);
+      expect(state.bookedTimeSlots[0].time).toBe(time);
+    });
+
+    test("should handle cancelTimeSlot with empty id", () => {
+      const stateWithSlot = doctorReducer(
+        initialState,
+        bookTimeSlot({
+          doctor: mockDoctor,
+          dateTime: 1696118400000,
+          time: "10:00",
+        })
+      );
+      
+      const action = cancelTimeSlot({ id: "" });
+      const state = doctorReducer(stateWithSlot, action);
+      
+      expect(state.bookedTimeSlots[0].isBooked).toBe(true);
+    });
+
+    test("should handle bookTimeSlot with same time but different date", () => {
+      const firstDateTime = 1696118400000; // 2023-10-01
+      const secondDateTime = 1696204800000; // 2023-10-02
+      const time = "10:00";
+      
+      const state = doctorReducer(
+        doctorReducer(
+          initialState,
+          bookTimeSlot({ doctor: mockDoctor, dateTime: firstDateTime, time })
+        ),
+        bookTimeSlot({ doctor: mockDoctor, dateTime: secondDateTime, time })
+      );
+      
+      expect(state.bookedTimeSlots).toHaveLength(2);
+      expect(state.bookedTimeSlots[0].date).toBe(firstDateTime);
+      expect(state.bookedTimeSlots[1].date).toBe(secondDateTime);
+    });
+  });
+
   describe("complex workflows", () => {
     test("should handle complete booking and cancellation workflow", () => {
       // Book a slot
@@ -355,6 +465,112 @@ describe("doctorSlice", () => {
       
       expect(state.bookedTimeSlots).toHaveLength(1);
       expect(state.bookedTimeSlots[0].isBooked).toBe(true);
+    });
+
+    test("should handle workflow with onlyView mode", () => {
+      let state = doctorReducer(initialState, onlyView(true));
+      expect(state.onlyView).toBe(true);
+      
+      // Even in onlyView mode, booking should still work
+      state = doctorReducer(state, bookTimeSlot({
+        doctor: mockDoctor,
+        dateTime: 1696118400000,
+        time: "10:00",
+      }));
+      
+      expect(state.bookedTimeSlots).toHaveLength(1);
+      expect(state.bookedTimeSlots[0].isBooked).toBe(true);
+      expect(state.onlyView).toBe(true);
+      
+      // Cancel should also work in onlyView mode
+      const slotId = state.bookedTimeSlots[0].id;
+      if (slotId) {
+        state = doctorReducer(state, cancelTimeSlot({ id: slotId }));
+        expect(state.bookedTimeSlots[0].isBooked).toBe(false);
+      }
+    });
+
+    test("should handle workflow with offline mode", () => {
+      let state = doctorReducer(initialState, setOffline(true));
+      expect(state.offline).toBe(true);
+      
+      // Booking should work in offline mode
+      state = doctorReducer(state, bookTimeSlot({
+        doctor: mockDoctor,
+        dateTime: 1696118400000,
+        time: "10:00",
+      }));
+      
+      expect(state.bookedTimeSlots).toHaveLength(1);
+      expect(state.bookedTimeSlots[0].isBooked).toBe(true);
+      expect(state.offline).toBe(true);
+    });
+
+    test("should handle workflow with initBookedTimeSlots", () => {
+      const mockSlots: BookedSlotModel[] = [
+        {
+          id: "slot1",
+          doctorName: "Dr. Smith",
+          doctorTimeZone: "UTC",
+          date: 1696118400000,
+          time: "10:00",
+          isBooked: true,
+          bookedTime: Date.now(),
+        },
+        {
+          id: "slot2",
+          doctorName: "Dr. Smith",
+          doctorTimeZone: "UTC",
+          date: 1696118400000,
+          time: "11:00",
+          isBooked: false,
+          bookedTime: Date.now(),
+        },
+      ];
+      
+      let state = doctorReducer(initialState, initBookedTimeSlots(mockSlots));
+      expect(state.bookedTimeSlots).toHaveLength(2);
+      expect(state.bookedTimeSlots[0].isBooked).toBe(true);
+      expect(state.bookedTimeSlots[1].isBooked).toBe(false);
+      
+      // Book a new slot
+      state = doctorReducer(state, bookTimeSlot({
+        doctor: mockDoctor,
+        dateTime: 1696118400000,
+        time: "12:00",
+      }));
+      
+      expect(state.bookedTimeSlots).toHaveLength(3);
+    });
+
+    test("should handle complete state reset workflow", () => {
+      let state = doctorReducer(initialState, selectDoctor(mockDoctor));
+      state = doctorReducer(state, selectDate(1696118400000));
+      state = doctorReducer(state, bookTimeSlot({
+        doctor: mockDoctor,
+        dateTime: 1696118400000,
+        time: "10:00",
+      }));
+      state = doctorReducer(state, onlyView(true));
+      state = doctorReducer(state, setOffline(true));
+      
+      expect(state.selectedDoctor).toEqual(mockDoctor);
+      expect(state.selectedDate).toBe(1696118400000);
+      expect(state.bookedTimeSlots).toHaveLength(1);
+      expect(state.onlyView).toBe(true);
+      expect(state.offline).toBe(true);
+      
+      // Reset state
+      state = doctorReducer(state, clearSelectedDoctor());
+      state = doctorReducer(state, clearSelectedDate());
+      state = doctorReducer(state, initBookedTimeSlots([]));
+      state = doctorReducer(state, onlyView(false));
+      state = doctorReducer(state, setOffline(false));
+      
+      expect(state.selectedDoctor).toBeNull();
+      expect(state.bookedTimeSlots).toHaveLength(0);
+      expect(state.onlyView).toBe(false);
+      expect(state.offline).toBe(false);
     });
   });
 });

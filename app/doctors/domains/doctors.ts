@@ -1,8 +1,9 @@
-
-import { DoctorModel } from "@/app/models/types";
-import { doctorList } from "@/app/services/myServices";
+import { DoctorModel } from "@/app/models/types"
+import { doctorList } from "@/app/services/myServices"
 export const listDoctors = async (): Promise<DoctorModel[]> => {
-  const doctors = await doctorList();
-  return doctors;
-};
+  console.log("listDoctors")
+  const doctors = await doctorList()
+  console.log("listDoctors ok")
 
+  return doctors
+}

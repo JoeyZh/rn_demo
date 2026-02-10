@@ -145,7 +145,7 @@ export const utcInterval = (fromTimeZone: string,toTimeZone:string): number => {
  * @param interval 时间间隔（毫秒），默认30分钟
  * @returns 是否可用
  */
-export const bookedAvailable = (date: Date,time:string, timezone: string,interval:number = 30 * 60 * 1000): boolean => {
+export const bookedAvailable = (date: Date, time: string, timezone: string, interval: number = 30 * 60 * 1000): boolean => {
   // 处理负间隔情况
   if (interval < 0) {
     return true;
@@ -153,6 +153,21 @@ export const bookedAvailable = (date: Date,time:string, timezone: string,interva
 
   try {
     const now = new Date();
+    
+    // 验证时区是否有效
+    const isValidTimezone = () => {
+      try {
+        new Intl.DateTimeFormat('en-US', { timeZone: timezone });
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    
+    if (!isValidTimezone()) {
+      return false;
+    }
+    
     // 获取 date 的年月日部分，年月日需要小于当前时间的年月日部分， 获取time的小时和分钟部分，拼接成一个新的时间 newDate，设置时区为 timezone
     const bookDate = new Date(date.toLocaleString("en-US", { timeZone: timezone }));
     const [hours, minutes] = time.split(":").map(Number);
@@ -161,7 +176,6 @@ export const bookedAvailable = (date: Date,time:string, timezone: string,interva
     //  如果当前时间早于预约时间 并且预约时间与当前时间的间隔大于 interval，则返回 true，否则返回 false
     return bookDate.getTime() - now.getTime() > interval;
   } catch (error) {
-    console.error("时区处理错误:", error);
     return false;
   }
 };

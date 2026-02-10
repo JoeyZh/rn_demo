@@ -43,3 +43,4 @@ yarn-error.*
 # vs code
 .vscode/
 .history/
+.pnpm-store/

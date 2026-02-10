@@ -10,6 +10,11 @@ module.exports = {
     '!**/node_modules/**',
     '!**/babel.config.js',
     '!**/jest.setup.js',
+    '!app/services/**',
+    '!app/**/domains/**',
+    '!app/**/components/**',
+    '!app/**/*.stories.{js,jsx,ts,tsx}',
+    '!app/.ondevice/**',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
