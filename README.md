@@ -173,7 +173,7 @@ Refer to test files in the __tests__ directory, including tests for hooks and ut
 - Number of test suites: 12
 - Number of test cases executed: 213
 - Test results: All passed (213/213)
-
+file://coverage/lcov-report/index.html
 
 File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                            
 --------------------------|---------|----------|---------|---------|----------------------------------------------
