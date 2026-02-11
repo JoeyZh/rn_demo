@@ -127,7 +127,7 @@ https://github.com/user-attachments/assets/58b6f279-aaa6-41c8-bf49-4ca67833b320
 
 ## 🧪 Testing
 
-### [Test Coverage](./coverage/lcov-report/index.html)
+### Test Coverage
 具体测试文件参看__tests__目录下,包括hooks和utils工具类的函数测试（该部分由 AI vibe coding实现）
 
 ## 测试执行情况
@@ -135,6 +135,7 @@ https://github.com/user-attachments/assets/58b6f279-aaa6-41c8-bf49-4ca67833b320
 - 执行用例数 ：213 个
 - 测试结果 ：全部通过（213/213）
 
+---
 
 File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                            
 --------------------------|---------|----------|---------|---------|----------------------------------------------

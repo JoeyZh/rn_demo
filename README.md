@@ -165,7 +165,7 @@ Ensure you have the following tools installed:
 ## 🧪 Testing
 
 
-### [Test Coverage](./coverage/lcov-report/index.html)
+### Test Coverage
 Refer to test files in the __tests__ directory, including tests for hooks and utility functions (implemented with AI-assisted coding).
 
 
@@ -173,6 +173,8 @@ Refer to test files in the __tests__ directory, including tests for hooks and ut
 - Number of test suites: 12
 - Number of test cases executed: 213
 - Test results: All passed (213/213)
+
+---
 
 File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                            
 --------------------------|---------|----------|---------|---------|----------------------------------------------
